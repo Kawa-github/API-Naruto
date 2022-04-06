@@ -11,9 +11,9 @@
 <style>
 
 @import url('http://fonts.cdnfonts.com/css/ninja-naruto');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,500&display=swap');
     body{
-        background-color: #D3D3D3;
+        /* background-color: #D3D3D3; */
     }
     
     
@@ -22,14 +22,16 @@
         height: auto;
         /* overflow-y: auto; */
         border-radius: 40px;
-        /* border: 1px solid; */
-        /* border-image: linear-gradient(45deg, #EC9F05, #FF4E00 100%) 1 ; */
-        /* background-color: #ff4e00; */
+        background-color:  #f5f5dc;
+        /* background-color: #dee0dc; */
+    }
+
+    .cardPersonagem .card-body{
+        font-family: 'Montserrat', sans-serif;
     }
     
-    .card-title{
+    .txtNaruto{
         font-family: 'Ninja Naruto', sans-serif;
-
     }
 
     .borderCard{
@@ -64,12 +66,32 @@
         <div class="d-flex justify-content-center align-items-center">
             <div class="card p-4 m-3 cardFiltro">
                 <h5 class="card-text">Filtrar por:</h5>
-                <select class="form-select form-select-sm">
-                    <option selected>Selecione</option>
-                    <option value="">Nome</option>
-                    <option value="">Clã</option>
-                    <option value="">Gênero</option>
+            <select class="form-select form-select-sm opcoes-select">
+                <option selected>Selecione</option>
+                <option value="CLA">Clã</option>
+                <option value="SEXO">Gênero</option>
+            </select>
+
+            <div class="div-cla mt-2 d-none">
+                <select class="form-select form-select-sm select-cla">
+                    <option value="Clã Sarutobi">Clã Sarutobi</option>
+                    <option value="Clã Akimichi">Clã Akimichi </option>
+                    <option value="Clã Hyūga">Clã Hyūga </option>
+                    <option value="Clã Yamanaka">Clã Yamanaka </option>
+                    <option value="Clã Uchiha">Clã Uchiha </option>
+                    <option value="Clã dos Kazekage">Clã dos Kazekage </option>
+                    <option value="Clã Ōtsutsuki">Clã Ōtsutsuki</option>
+                    <option value="Clã Senju"> Clã Senju </option>
                 </select>
+            </div>
+
+            <div class="div-sexo d-none">
+                <select class="form-select form-select-sm mt-2 select-sexo">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                </select>
+            </div>
+
             </div>
         </div>
     </div>
@@ -82,7 +104,7 @@
         <div class="modal-dialog modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h5 class="modal-title txtNaruto"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
@@ -151,12 +173,12 @@
                         <center>
                             <img src="${personagem.images[0]}" class="imgPersonagens card-img-top">
                         </center>
-                        <div class="card-title text-center p-2">
+                        <div class="card-title text-center p-2 txtNaruto">
                             ${personagem.name.replace('_',' ')}
                         </div>
                             <div class="card-body">
-                                <p>Clã: ${cla} </p>
-                                <p>Sexo: ${sexo}</p>
+                                <p>Clã: <span class="spanCla"> ${cla} </span> </p>
+                                <p>Sexo: <span class="spanSexo"> ${sexo} </span> </p>
                                 <p>Idade: ${idade}</p>
                                 <p>Aniverśario: ${aniversario}</p>
                                 <p>Altura: ${altura} </p>
@@ -165,9 +187,7 @@
                         </div>
                     </div>
             `
-            //criar git e fazer primeiro commit
-            
-            
+        
             $('.cards').append(informacoes)
         })
 
@@ -190,6 +210,41 @@
 
         
         $('.btn-detalhes').on('click', abrirCard)
+
+
+        function filtrarCla(){     
+            let filtro = $(this).val()
+            $(`.spanCla:contains(${filtro})`).closest('.cardPersonagem').removeClass('d-none')
+            $(`.spanCla:not(:contains(${filtro}))`).closest('.cardPersonagem').addClass('d-none')
+        }
+
+        function filtrarSexo(){
+            let filtro = $(this).val()
+            $(`.spanSexo:contains(${filtro})`).closest('.cardPersonagem').removeClass('d-none')
+            $(`.spanSexo:not(:contains(${filtro}))`).closest('.cardPersonagem').addClass('d-none')
+        }
+        
+        $('.select-cla').on('change', filtrarCla)
+        $('.select-sexo').on('change', filtrarSexo)
+        
+
+        $('.opcoes-select').on('change', function(){          
+            let opcoes = $('.opcoes-select').val()
+            console.log(opcoes)
+            switch (opcoes){
+                case '':
+                    $('.div-cla .div-sexo').addClass('d-none')
+                break
+                case 'CLA':
+                    $('.div-cla').removeClass('d-none')
+                    $('.div-sexo').addClass('d-none')
+                break
+                case 'SEXO':
+                    $('.div-sexo').removeClass('d-none')
+                    $('.div-cla').addClass('d-none')
+                break
+            }
+        })
 
     })
 </script>
