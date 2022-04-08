@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +14,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,500&display=swap');
     body{
         /* background-color: #D3D3D3; */
+                background-color: #dee0dc;
     }
     
     
@@ -68,8 +69,10 @@
                 <h5 class="card-text">Filtrar por:</h5>
             <select class="form-select form-select-sm opcoes-select">
                 <option selected>Selecione</option>
+                <option value="TODOS">Todos</option>
                 <option value="CLA">Clã</option>
                 <option value="SEXO">Gênero</option>
+                <option value="NOME">Nome</option>
             </select>
 
             <div class="div-cla mt-2 d-none">
@@ -82,6 +85,7 @@
                     <option value="Clã dos Kazekage">Clã dos Kazekage </option>
                     <option value="Clã Ōtsutsuki">Clã Ōtsutsuki</option>
                     <option value="Clã Senju"> Clã Senju </option>
+                    <option value="Clã Hatake">Clã Hatake</option>
                 </select>
             </div>
 
@@ -92,6 +96,10 @@
                 </select>
             </div>
 
+
+            <div class="div-nome mt-2">
+                <input type="text" class="form-control-sm buscaNome" placeholder="Digite um nome...">
+            </div>
             </div>
         </div>
     </div>
@@ -117,28 +125,19 @@
 
 </body>
 
+<!-- <script src="https://unpkg.com/scrollreveal"></script> -->
+
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymou"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script>
+</script>
 <script>
     $(document).ready( async () => {
         
         let personagens = await $.get('https://naruto-api.herokuapp.com/api/v1/characters/')
-
-        // personagens.map(personagem => {
-        //     let tr = `
-        //         <tr>
-        //             <td>
-        //                 ${personagem.name.replace('_',' ')}
-        //             </td>
-        //             <td>
-        //                 <img src="${personagem.images[0]}" class="imgPersonagens w-25 h-25" >                        
-        //             </td> 
-        //         </tr>
-        //     `
-        //     $('tbody').append(tr)
-                // })
-
-        
 
         personagens.map(personagem => {
             
@@ -165,20 +164,20 @@
             let aniversario = !("Aniversário" in personagem.info)
                 ?  "Aniversário desconhecido."
                 : personagem.info.Aniversário
-
+                
                 
                 let informacoes = `
-                <div class="card cardPersonagem m-3 pt-3 shadow">
+                <div class="card cardPersonagem m-3 pt-3 shadow headline" data-aos="fade-down">
                     <div class="borderCard">
                         <center>
                             <img src="${personagem.images[0]}" class="imgPersonagens card-img-top">
                         </center>
-                        <div class="card-title text-center p-2 txtNaruto">
+                        <div class="card-title text-center p-2 txtNaruto divNomePersonagem ">
                             ${personagem.name.replace('_',' ')}
                         </div>
                             <div class="card-body">
-                                <p>Clã: <span class="spanCla"> ${cla} </span> </p>
-                                <p>Sexo: <span class="spanSexo"> ${sexo} </span> </p>
+                                <p class="">Clã: <span class="spanCla"> ${cla} </span> </p>
+                                <p class="">Sexo: <span class="spanSexo"> ${sexo} </span> </p>
                                 <p>Idade: ${idade}</p>
                                 <p>Aniverśario: ${aniversario}</p>
                                 <p>Altura: ${altura} </p>
@@ -190,6 +189,8 @@
         
             $('.cards').append(informacoes)
         })
+        
+        AOS.init();
 
         let modalDetalhes = new bootstrap.Modal($('#myModal'))
 
@@ -211,7 +212,6 @@
         
         $('.btn-detalhes').on('click', abrirCard)
 
-
         function filtrarCla(){     
             let filtro = $(this).val()
             $(`.spanCla:contains(${filtro})`).closest('.cardPersonagem').removeClass('d-none')
@@ -223,7 +223,26 @@
             $(`.spanSexo:contains(${filtro})`).closest('.cardPersonagem').removeClass('d-none')
             $(`.spanSexo:not(:contains(${filtro}))`).closest('.cardPersonagem').addClass('d-none')
         }
+
         
+        $(function(){
+            $('.buscaNome').keyup(function(){
+                let texto = $(this).val()
+
+                $('.cardPersonagem').each(function(){
+                    let resultado = $(this).text().toUpperCase().indexOf(' ' + texto.toUpperCase())
+                
+                    if(resultado < 0){
+                        $(this).fadeOut()
+                    }else{
+                        $(this).fadeIn()
+                    }
+
+                })
+            })
+        })
+    
+        // $('.borderCard').on('change', listarTodosPersonagens)
         $('.select-cla').on('change', filtrarCla)
         $('.select-sexo').on('change', filtrarSexo)
         
@@ -232,15 +251,24 @@
             let opcoes = $('.opcoes-select').val()
             console.log(opcoes)
             switch (opcoes){
-                case '':
-                    $('.div-cla .div-sexo').addClass('d-none')
+                case 'TODOS':
+                    $('.div-cla').addClass('d-none')
+                    $('.div-sexo').addClass('d-none')
+                    $('.div-nome').addClass('d-none')
                 break
                 case 'CLA':
                     $('.div-cla').removeClass('d-none')
                     $('.div-sexo').addClass('d-none')
+                    $('.div-nome').addClass('d-none')
                 break
                 case 'SEXO':
                     $('.div-sexo').removeClass('d-none')
+                    $('.div-cla').addClass('d-none')
+                    $('.div-nome').addClass('d-none')
+                break
+                case 'NOME':
+                    $('.div-nome').removeClass('d-none')
+                    $('.div-sexo').addClass('d-none')
                     $('.div-cla').addClass('d-none')
                 break
             }
