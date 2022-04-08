@@ -1,0 +1,50 @@
+
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,500&display=swap');
+        
+    body{
+        background-color: #dee0dc;
+    }
+    
+    
+    .cardPersonagem{
+        width: 600px;
+        height: auto;
+        /* overflow-y: auto; */
+        border-radius: 40px;
+        background-color:  #f5f5dc;
+        /* background-color: #dee0dc; */
+    }
+
+    .cardPersonagem .card-body{
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .txtNaruto{
+        font-family: 'Ninja Naruto', sans-serif;
+    }
+
+    .borderCard{
+        border-radius: 40px;
+    }
+
+    .imgPersonagens{
+        border-radius: 100px;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        position:relative;
+        top:0;
+        padding:4px;
+        background-color: #ff4e00;
+        background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
+
+        transition: all .2s ease-in-out;
+    }
+
+    .imgPersonagens:hover{
+        cursor: pointer;
+        top:-4px;box-shadow:0 4px 3px #999
+    }
+    .cardFiltro{
+        border-radius: 20px;
+    }
