@@ -53,9 +53,9 @@ $(document).ready( async () => {
         $('.cards').append(informacoes)
     })
     
-    AOS.init(); // para iniciar a animação
+    // AOS.init(); // para iniciar a animação
 
-    let modalDetalhes = new bootstrap.Modal($('#myModal'))
+    let modalDetalhes = new bootstrap.Modal($('#myModal')) // abrir modal bootstrap
 
      async function abrirCard(){
         modalDetalhes.show()
@@ -87,6 +87,11 @@ $(document).ready( async () => {
         $(`.spanSexo:not(:contains(${filtro}))`).closest('.cardPersonagem').addClass('d-none')
     }
 
+     function removerFiltro(){
+
+        $('.cardPersonagem').removeClass('d-none')
+        
+    }
     
     $(function(){
         $('.buscaNome').keyup(function(){
@@ -96,28 +101,28 @@ $(document).ready( async () => {
                 let resultado = $(this).text().toUpperCase().indexOf(' ' + texto.toUpperCase())
             
                 if(resultado < 0){
-                    $(this).fadeOut()
+                    $(this).addClass('d-none')
                 }else{
-                    $(this).fadeIn()
+                    $(this).removeClass('d-none')
                 }
 
             })
         })
     })
 
-    // $('.borderCard').on('change', listarTodosPersonagens)
+    $('.opcoes-select').on('change', removerFiltro)
     $('.select-cla').on('change', filtrarCla)
     $('.select-sexo').on('change', filtrarSexo)
     
 
     $('.opcoes-select').on('change', function(){          
         let opcoes = $('.opcoes-select').val()
-        console.log(opcoes)
+        
         switch (opcoes){
             case 'TODOS':
                 $('.div-cla').addClass('d-none')
                 $('.div-sexo').addClass('d-none')
-                $('.div-nome').addClass('d-none')
+                $('.div-nome').addClass('d-none')           
             break
             case 'CLA':
                 $('.div-cla').removeClass('d-none')
