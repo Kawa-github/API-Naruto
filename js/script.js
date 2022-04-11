@@ -96,17 +96,36 @@ $(document).ready( async () => {
     $(function(){
         $('.buscaNome').keyup(function(){
             let texto = $(this).val()
+            let divAlert = $('.divAlert')
 
+            divAlert.empty()
+
+            alertaVazio = `
+            <div class="alert alert-warning w-50 p-3 text-center" role="alert">
+                Personagem não encontrado!
+            </div>
+            `  
+            
             $('.cardPersonagem').each(function(){
                 let resultado = $(this).text().toUpperCase().indexOf(' ' + texto.toUpperCase())
-            
                 if(resultado < 0){
                     $(this).addClass('d-none')
-                }else{
-                    $(this).removeClass('d-none')
+                    
                 }
-
+                else{
+                    $(this).removeClass('d-none')
+                    
+                }
+            
             })
+            
+            let cards = $('.cardPersonagem').length
+            let cardsComPersonagensComDnone =  $('.cardPersonagem.d-none').length
+
+            if(cards == cardsComPersonagensComDnone){
+                divAlert.append(alertaVazio)
+            }
+            
         })
     })
 
