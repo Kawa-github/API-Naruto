@@ -1,6 +1,6 @@
 $(document).ready( async () => {
         
-    let personagens = await $.get('https://naruto-api.herokuapp.com/api/v1/characters/')
+    let personagens = await $.get('https://naruto-api.fly.dev/api/v1/characters')
 
     personagens.map(personagem => {
         
@@ -60,7 +60,7 @@ $(document).ready( async () => {
      async function abrirCard(){
         modalDetalhes.show()
         let id = $(this).attr('id-personagem')
-        let personagem = await $.get(`https://naruto-api.herokuapp.com/api/v1/characters/${id}`)
+        let personagem = await $.get(`https://naruto-api.fly.dev/api/v1/characters/${id}`)
         
         $('#myModal .modal-title')
             .empty()
